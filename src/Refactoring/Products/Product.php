@@ -34,7 +34,7 @@ class Product
     private $counter;
 
     /**
-     * OldProduct constructor.
+     * Product constructor.
      * @param BigDecimal|null $price
      * @param string|null $desc
      * @param string|null $longDesc
