@@ -49,65 +49,21 @@ class Product
         $this->counter = $counter;
     }
 
-    /**
-     * @return UuidInterface
-     */
-    public function getSerialNumber(): UuidInterface
-    {
-        return $this->serialNumber;
-    }
+    foreach($this as $key => $value){
+        
+        $tmpname = 'get'.ucfirst($key);
+        
+        $tmpname = public function(){
+            return $value;
+        }
 
-    /**
-     * @return BigDecimal
-     */
-    public function getPrice(): BigDecimal
-    {
-        return $this->price;
     }
-
-    /**
-     * @return string
-     */
-    public function getDesc(): string
-    {
-        return $this->desc;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLongDesc(): string
-    {
-        return $this->longDesc;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCounter(): int
-    {
-        return $this->counter;
-    }
-
     /**
      * @throws \Exception
      */
     public function decrementCounter(): void
     {
-        if ($this->price != null && $this->price->getSign() > 0) {
-            if ($this->counter === null) {
-                throw new \Exception("null counter");
-            }
-
-            $this->counter = $this->counter - 1;
-
-            if ($this->counter < 0) {
-                throw new \Exception("Negative counter");
-            }
-        } else {
-            throw new \Exception("Invalid price");
-
-        }
+        counter('-');
     }
 
     /**
@@ -115,6 +71,10 @@ class Product
      */
     public function incrementCounter(): void
     {
+        counter('+');
+    }
+
+    private function counter($type){
         if ($this->price != null && $this->price->getSign() > 0) {
             if ($this->counter === null) {
                 throw new \Exception("null counter");
@@ -123,8 +83,9 @@ class Product
             if ($this->counter + 1 < 0) {
                 throw new \Exception("Negative counter");
             }
-
-            $this->counter = $this->counter + 1;
+            
+            $this->counter = ($type == '-') ? $this->counter - 1 : $this->counter + 1;
+        
         } else {
             throw new \Exception("Invalid price");
         }
@@ -156,43 +117,29 @@ class Product
      */
     public function replaceCharFromDesc(?string $charToReplace, ?string $replaceWith): void
     {
-        if ($this->longDesc === null || empty($this->longDesc) || $this->desc === null || empty($this->desc)) {
-            throw new \Exception("null or empty desc");
-        }
 
-        $this->longDesc = str_replace($charToReplace, $replaceWith, $this->longDesc);
-        $this->desc = str_replace($charToReplace, $replaceWith, $this->desc);
     }
-
     /**
      * @return string
      */
-    public function formatDesc(): string {
+    public function formatDesc(): string 
+    {
+    
+    }
+
+    private function changeDesc(?string $charToReplace = null, ?string $replaceWith=null)
+    {
         if ($this->longDesc === null || empty($this->longDesc) || $this->desc === null || empty($this->desc)) {
-            return "";
+            ($charToReplace & $replaceWith) ? throw new \Exception("null or empty desc") : return "";
         }
 
-        return $this->desc . " *** " . $this->longDesc;
+        if($charToReplace & $replaceWith){
+            $this->longDesc = str_replace($charToReplace, $replaceWith, $this->longDesc);
+            $this->desc = str_replace($charToReplace, $replaceWith, $this->desc);
+        }else{
+            return $this->desc . " *** " . $this->longDesc;
+        }
+
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+?>
