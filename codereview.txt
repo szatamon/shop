@@ -1,0 +1,2 @@
+Według mnie głównym problemem tego kodu jest powielanie, tego samego kodu.
+Drugim problemem są niejednoznaczne wyjątki.
